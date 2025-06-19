@@ -1,15 +1,15 @@
 import { IsNumber, IsString, IsUUID } from 'class-validator';
 
 export class CreateRaffleDto {
-    @IsUUID()
-    creatorId: string;
+  @IsUUID()
+  creatorId: string;
 
-    @IsString()
-    description: string;
+  @IsString()
+  description: string;
 
-    @IsNumber()
-    ticketPrice: number;
+  @IsNumber()
+  ticketPrice: number;
 
-    @IsNumber()
-    prizeValue: number;
+  @IsNumber()
+  prizeValue: number;
 }

@@ -11,7 +11,6 @@ export class RafflesService {
     ) { }
 
     async create(createRaffleDto: CreateRaffleDto): Promise<Raffle> {
-
         return this.raffleModel.create<Raffle>({
             ...createRaffleDto,
             tickets: Array(100).fill(false), // Inicializar matriz de tickets vacía

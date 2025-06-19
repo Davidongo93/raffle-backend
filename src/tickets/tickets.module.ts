@@ -7,10 +7,8 @@ import { TicketsController } from './tickets.controller';
 import { TicketsService } from './tickets.service';
 
 @Module({
-  imports: [
-    SequelizeModule.forFeature([User, Raffle, Ticket]),
-  ],
+  imports: [SequelizeModule.forFeature([User, Raffle, Ticket])],
   providers: [TicketsService],
-  controllers: [TicketsController]
+  controllers: [TicketsController],
 })
-export class TicketsModule { }
+export class TicketsModule {}

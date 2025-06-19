@@ -5,30 +5,30 @@ import { RafflesService } from './raffles.service';
 
 @Controller('raffles')
 export class RafflesController {
-    constructor(private readonly rafflesService: RafflesService) { }
+  constructor(private readonly rafflesService: RafflesService) {}
 
-    @Post()
-    create(@Body() createRaffleDto: CreateRaffleDto): Promise<Raffle> {
-        return this.rafflesService.create(createRaffleDto);
-    }
+  @Post()
+  create(@Body() createRaffleDto: CreateRaffleDto): Promise<Raffle> {
+    return this.rafflesService.create(createRaffleDto);
+  }
 
-    @Get()
-    findAll(): Promise<Raffle[]> {
-        return this.rafflesService.findAll();
-    }
+  @Get()
+  findAll(): Promise<Raffle[]> {
+    return this.rafflesService.findAll();
+  }
 
-    @Get(':id')
-    findOne(@Param('id') id: string): Promise<Raffle | null> {
-        return this.rafflesService.findOne(id);
-    }
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<Raffle | null> {
+    return this.rafflesService.findOne(id);
+  }
 
-    @Patch(':id/status')
-    updateStatus(
-        @Param('id') id: string,
-        @Body('status') status: RaffleStatus,
-    ): Promise<Raffle> {
-        console.log(`Updating raffle ${id} status to ${status}`);
+  @Patch(':id/status')
+  updateStatus(
+    @Param('id') id: string,
+    @Body('status') status: RaffleStatus,
+  ): Promise<Raffle> {
+    console.log(`Updating raffle ${id} status to ${status}`);
 
-        return this.rafflesService.updateStatus(id, status);
-    }
+    return this.rafflesService.updateStatus(id, status);
+  }
 }

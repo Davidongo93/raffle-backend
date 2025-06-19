@@ -7,10 +7,8 @@ import { RafflesController } from './raffles.controller';
 import { RafflesService } from './raffles.service';
 
 @Module({
-  imports: [
-    SequelizeModule.forFeature([User, Raffle, Ticket]),
-  ],
+  imports: [SequelizeModule.forFeature([User, Raffle, Ticket])],
   providers: [RafflesService],
-  controllers: [RafflesController]
+  controllers: [RafflesController],
 })
-export class RafflesModule { }
+export class RafflesModule {}
