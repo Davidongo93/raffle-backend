@@ -11,6 +11,15 @@ import {
 } from 'sequelize-typescript';
 import { User } from '../../business/users/user.model';
 
+type OTPCreationAttributes = {
+    userId: string;
+    code: string;
+    type: 'WHATSAPP' | 'EMAIL' | 'LOGIN';
+    expiresAt: Date;
+    isUsed?: boolean;
+    usedAt?: Date;
+};
+
 interface OTPAttributes {
     id: string;
     userId: string;
@@ -27,7 +36,7 @@ interface OTPAttributes {
     tableName: 'otps',
     timestamps: true,
 })
-export class OTP extends Model<OTPAttributes> {
+export class OTP extends Model<OTPAttributes, OTPCreationAttributes> {
     @Column({
         type: DataType.UUID,
         primaryKey: true,

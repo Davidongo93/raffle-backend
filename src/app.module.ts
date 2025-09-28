@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { RafflesModule } from './business/raffles/raffles.module';
 import { TicketsModule } from './business/tickets/tickets.module';
 import { UsersModule } from './business/users/users.module';
+import { AuthModule } from './core/auth/auth.module';
 import { MiddlewaresModule } from './core/middleware/middlewares.module';
 
 //sql script development database creation
@@ -61,6 +62,7 @@ const sequelizeEnvironment = process.env.NODE_ENV === 'production' ?
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     sequelizeEnvironment,
+    AuthModule,
     MiddlewaresModule,
     UsersModule,
     RafflesModule,
