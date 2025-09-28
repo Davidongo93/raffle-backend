@@ -16,7 +16,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       return await this.userModel.create<User>(createUserDto);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error)
       if (error instanceof UniqueConstraintError) {
         const field = error.errors[0].path;
@@ -26,7 +26,8 @@ export class UsersService {
         throw new BadRequestException(`${error.message}`);
       }
 
-      throw new InternalServerErrorException(`Al crear usuario: ${String(error.message)}`);
+      const errorMessage = typeof error === 'object' && error !== null && 'message' in error ? String((error as { message?: unknown }).message) : String(error);
+      throw new InternalServerErrorException(`Al crear usuario: ${errorMessage}`);
     }
 
   }
