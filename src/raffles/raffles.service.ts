@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateRaffleDto } from './dto/create-raffle.dto';
-import { Raffle, RaffleStatus } from './raffle.model';
+import { Raffle, RaffleStatus, RaffleType } from './raffle.model';
 
 @Injectable()
 export class RafflesService {
@@ -11,11 +11,18 @@ export class RafflesService {
     ) { }
 
     async create(createRaffleDto: CreateRaffleDto): Promise<Raffle> {
+
+        let tickets: boolean[] = Array(100).fill(false) as boolean[];
+        if (createRaffleDto.raffleType === RaffleType.MEDIUM) {
+            tickets = Array(1000).fill(false) as boolean[];
+        } else if (createRaffleDto.raffleType === RaffleType.LARGE) {
+            tickets = Array(10000).fill(false) as boolean[];
+        }
         return this.raffleModel.create<Raffle>({
             ...createRaffleDto,
-            tickets: Array(100).fill(false), // Inicializar matriz de tickets vacía
+            tickets,
             status: RaffleStatus.DRAFT,
-        } as any);
+        });
     }
 
     async findAll(): Promise<Raffle[]> {

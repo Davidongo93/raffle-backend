@@ -71,10 +71,6 @@ export class Ticket extends Model<TicketAttributes, TicketCreationAttributes> {
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
-    validate: {
-      min: 0,
-      max: 99,
-    },
   })
   declare number: number;
 

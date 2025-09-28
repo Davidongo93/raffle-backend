@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Transaction } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
-import { Raffle } from '../raffles/raffle.model';
+import { Raffle, RaffleStatus, RaffleType } from '../raffles/raffle.model';
 import { BuyTicketDto } from './dto/buy-ticket.dto';
 import { Ticket, TicketStatus } from './ticket.model';
 
@@ -14,7 +14,7 @@ export class TicketsService {
     @InjectModel(Raffle)
     private raffleModel: typeof Raffle,
     private sequelize: Sequelize,
-  ) {}
+  ) { }
 
   async buyTicket(buyTicketDto: BuyTicketDto): Promise<Ticket> {
     const { raffleId, userId, number, urlComprobante } = buyTicketDto;
@@ -29,13 +29,21 @@ export class TicketsService {
         throw new BadRequestException('Raffle not found');
       }
 
-      if (raffle.status !== 'active') {
+      if (raffle.status !== RaffleStatus.ACTIVE) {
         throw new BadRequestException('Raffle is not active');
       }
 
-      if (number < 0 || number > 99) {
+      if (raffle.raffleType === RaffleType.SMALL && (number < 0 || number > 99)) {
         throw new BadRequestException(
           'Invalid ticket number (must be between 0-99)',
+        );
+      } else if (raffle.raffleType === RaffleType.MEDIUM && (number < 0 || number > 999)) {
+        throw new BadRequestException(
+          'Invalid ticket number (must be between 0-999)',
+        );
+      } else if (raffle.raffleType === RaffleType.LARGE && (number < 0 || number > 9999)) {
+        throw new BadRequestException(
+          'Invalid ticket number (must be between 0-9999)',
         );
       }
       if (urlComprobante && typeof urlComprobante !== 'string') {
@@ -43,9 +51,22 @@ export class TicketsService {
       }
 
       // Convertir el array de tickets a formato JSON seguro
-      const ticketsArray = Array.isArray(raffle.tickets)
+      const getArraySize = (raffle: Raffle) => {
+        switch (raffle.raffleType) {
+          case RaffleType.SMALL:
+            return 100;
+          case RaffleType.MEDIUM:
+            return 1000;
+          case RaffleType.LARGE:
+            return 10000;
+          default:
+            return 100;
+        }
+      }
+
+      const ticketsArray: boolean[] = Array.isArray(raffle.tickets)
         ? [...raffle.tickets]
-        : Array(100).fill(false);
+        : Array(getArraySize(raffle)).fill(false) as boolean[];
 
       // Verificar si el ticket ya está comprado
       if (ticketsArray[number]) {

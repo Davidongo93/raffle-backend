@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as morgan from 'morgan';
 import { Sequelize } from 'sequelize-typescript';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './filters/all-exceptions.filter';
@@ -26,6 +27,7 @@ async function bootstrap() {
     )
     .build();
 
+  app.use(morgan('combined'));
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document, {
     customSiteTitle: 'Documentación de API',
@@ -44,10 +46,10 @@ async function bootstrap() {
 
   app.enableCors({
     origin: process.env.CORS_ORIGIN || '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE, OPTIONS',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders:
       'Content-Type, Accept, Authorization, Host, Origin, X-Requested-With',
-    preflightContinue: true,
+    preflightContinue: false
   });
 
   // Sincronización de la base de datos

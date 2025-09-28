@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { UniqueConstraintError } from 'sequelize';
+import { UniqueConstraintError, ValidationError } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.model';
@@ -17,12 +17,18 @@ export class UsersService {
     try {
       return await this.userModel.create<User>(createUserDto);
     } catch (error) {
+      console.error(error)
       if (error instanceof UniqueConstraintError) {
         const field = error.errors[0].path;
         throw new ConflictException(`El ${field} ya está registrado`);
       }
-      throw new InternalServerErrorException('Error al crear el usuario');
+      if (error instanceof ValidationError) {
+        throw new BadRequestException(`${error.message}`);
+      }
+
+      throw new InternalServerErrorException(`Al crear usuario: ${String(error.message)}`);
     }
+
   }
 
   async findAll(): Promise<User[]> {

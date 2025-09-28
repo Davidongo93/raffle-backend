@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { MiddlewaresModule } from './middleware/middlewares.module';
 import { Raffle } from './raffles/raffle.model';
 import { RafflesModule } from './raffles/raffles.module';
 import { Ticket } from './tickets/ticket.model';
@@ -15,6 +16,7 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({ isGlobal: true }),
     SequelizeModule.forRootAsync({
       imports: [ConfigModule],
+
       useFactory: (configService: ConfigService) => ({
         dialect: 'postgres',
         host: configService.get<string>('DB_HOST'),
@@ -35,6 +37,7 @@ import { UsersModule } from './users/users.module';
       }),
       inject: [ConfigService],
     }),
+    MiddlewaresModule,
     UsersModule,
     RafflesModule,
     TicketsModule,
@@ -42,4 +45,4 @@ import { UsersModule } from './users/users.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
