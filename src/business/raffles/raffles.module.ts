@@ -11,4 +11,4 @@ import { RafflesService } from './raffles.service';
   providers: [RafflesService],
   controllers: [RafflesController],
 })
-export class RafflesModule {}
+export class RafflesModule { }

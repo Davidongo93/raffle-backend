@@ -3,10 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MiddlewaresModule } from './middleware/middlewares.module';
-import { RafflesModule } from './raffles/raffles.module';
-import { TicketsModule } from './tickets/tickets.module';
-import { UsersModule } from './users/users.module';
+import { RafflesModule } from './business/raffles/raffles.module';
+import { TicketsModule } from './business/tickets/tickets.module';
+import { UsersModule } from './business/users/users.module';
+import { MiddlewaresModule } from './core/middleware/middlewares.module';
 
 //sql script development database creation
 // run psql in terminal: psql -U postgres
