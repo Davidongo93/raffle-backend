@@ -7,15 +7,9 @@ import { RafflesModule } from './business/raffles/raffles.module';
 import { TicketsModule } from './business/tickets/tickets.module';
 import { UsersModule } from './business/users/users.module';
 import { AuthModule } from './core/auth/auth.module';
+
+import { CronJobsModule } from './core/cronJobs/cronJobs.module';
 import { MiddlewaresModule } from './core/middleware/middlewares.module';
-
-//sql script development database creation
-// run psql in terminal: psql -U postgres
-// then run the following commands:
-
-// CREATE DATABASE raffle_db;
-// CREATE USER raffle_user WITH ENCRYPTED PASSWORD 'password';
-// GRANT ALL PRIVILEGES ON DATABASE raffle_db TO raffle_user;
 
 const sequelizeEnvironment = process.env.NODE_ENV === 'production' ?
   SequelizeModule.forRootAsync({
@@ -57,10 +51,19 @@ const sequelizeEnvironment = process.env.NODE_ENV === 'production' ?
     }),
     inject: [ConfigService],
   });
+//sql script development database creation
+// run psql in terminal: psql -U postgres
+// then run the following commands:
+
+// CREATE DATABASE raffle_db;
+// CREATE USER raffle_user WITH ENCRYPTED PASSWORD 'password';
+// GRANT ALL PRIVILEGES ON DATABASE raffle_db TO raffle_user;
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    CronJobsModule,
     sequelizeEnvironment,
     AuthModule,
     MiddlewaresModule,

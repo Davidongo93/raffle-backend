@@ -53,12 +53,23 @@ export class OTPService {
 
         return true;
     }
+    // asi deberias escribir todos los metodos en los servicios
+    async cleanupExpiredOTPs(): Promise<number> {
+        try {
+            const result = await this.otpModel.destroy({
+                where: {
+                    expiresAt: {
+                        [Op.lt]: new Date(), // Elimina los OTPs cuya fecha de expiración es menor a la actual
+                    },
+                },
+            });
 
-    async cleanupExpiredOTPs(): Promise<void> {
-        await this.otpModel.destroy({
-            where: {
-                expiresAt: { [Op.lt]: new Date() },
-            },
-        });
+            this.logger.log(`Cleaned up ${result} expired OTPs`);
+            return result;
+        } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            this.logger.error('Error cleaning up expired OTPs', error.stack);
+            throw error;
+        }
     }
 }
