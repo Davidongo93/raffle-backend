@@ -17,7 +17,14 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migrate": "npx ts-node ./node_modules/.bin/sequelize-cli db:migrate --config ./src/core/config/sequelize-cli-config.cjs --migrations-path ./src/core/database/migrations",
+    "migrate:undo": "npx ts-node ./node_modules/.bin/sequelize-cli db:migrate:undo --config ./src/core/config/sequelize-cli-config.cjs --migrations-path ./src/core/database/migrations",
+    "migrate:undo:all": "npx ts-node ./node_modules/.bin/sequelize-cli db:migrate:undo:all --config ./src/core/config/sequelize-cli-config.cjs --migrations-path ./src/core/database/migrations",
+    "seed:all": "npx ts-node ./node_modules/.bin/sequelize-cli db:seed:all --config ./src/core/config/sequelize-cli-config.cjs --seeders-path ./src/core/database/seeders",
+    "seed:undo:all": "npx ts-node ./node_modules/.bin/sequelize-cli db:seed:undo:all --config ./src/core/config/sequelize-cli-config.cjs --seeders-path ./src/core/database/seeders",
+    "seedProd:all": "NODE_ENV=production npx ts-node ./node_modules/.bin/sequelize-cli db:seed:all --config ./src/core/config/sequelize-cli-config.cjs --seeders-path ./src/core/database/seeders --env production",
+    "seedProd:undo:all": "NODE_ENV=production npx ts-node ./node_modules/.bin/sequelize-cli db:seed:undo:all --config ./src/core/config/sequelize-cli-config.cjs --seeders-path ./src/core/database/seeders --env production"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -44,9 +51,11 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "sequelize": "^6.37.7",
+    "sequelize-cli": "^6.6.3",
     "sequelize-typescript": "^2.1.6",
     "swagger-ui-express": "^5.0.1",
     "twilio": "^5.10.1",
+    "types": "file:../../../../../sequelize-cli",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

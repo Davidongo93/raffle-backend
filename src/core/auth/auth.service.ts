@@ -116,6 +116,8 @@ export class AuthService {
 
     async validateUser(payload: { sub: string }): Promise<User> {
         try {
+            console.log('Validating user with ID:', payload.sub);
+
             const user: User | null = await this.userModel.findByPk(payload.sub);
             if (!user) {
                 throw new UnauthorizedException('Usuario no encontrado');

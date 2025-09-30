@@ -1,11 +1,14 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+//import { AuthGuard } from '@nestjs/passport';
 import { CreateRaffleDto } from './dto/create-raffle.dto';
-import { Raffle, RaffleStatus } from './raffle.model';
+import { RaffleHistory } from './raffle-history.mode';
+import { DrawMode, Raffle, RaffleStatus } from './raffle.model';
 import { RafflesService } from './raffles.service';
 
 @Controller('raffles')
+//@UseGuards(AuthGuard('jwt'))
 export class RafflesController {
-  constructor(private readonly rafflesService: RafflesService) {}
+  constructor(private readonly rafflesService: RafflesService) { }
 
   @Post()
   create(@Body() createRaffleDto: CreateRaffleDto): Promise<Raffle> {
@@ -22,13 +25,62 @@ export class RafflesController {
     return this.rafflesService.findOne(id);
   }
 
+  @Get(':id/history')
+  getHistory(@Param('id') id: string): Promise<RaffleHistory[]> {
+    return this.rafflesService.getRaffleHistory(id);
+  }
+
   @Patch(':id/status')
   updateStatus(
     @Param('id') id: string,
     @Body('status') status: RaffleStatus,
+    @Body('userId') userId: string,
   ): Promise<Raffle> {
     console.log(`Updating raffle ${id} status to ${status}`);
-
-    return this.rafflesService.updateStatus(id, status);
+    return this.rafflesService.updateStatus(id, status, userId);
   }
+
+  @Patch(':id/draw-settings')
+  updateDrawSettings(
+    @Param('id') id: string,
+    @Body('drawMode') drawMode: DrawMode,
+    @Body('drawDate') drawDate: Date,
+    @Body('userId') userId: string,
+    @Body('hasSecondPrizeInverted') hasSecondPrizeInverted?: boolean,
+    @Body('hasSecondPrizePalindrome') hasSecondPrizePalindrome?: boolean,
+    @Body('colombianLotteryType') colombianLotteryType?: string,
+  ): Promise<Raffle> {
+    return this.rafflesService.updateDrawSettings(
+      id,
+      drawMode,
+      new Date(drawDate),
+      userId,
+      hasSecondPrizeInverted,
+      hasSecondPrizePalindrome,
+      colombianLotteryType,
+    );
+  }
+
+  @Patch(':id/winning-numbers')
+  setWinningNumbers(
+    @Param('id') id: string,
+    @Body('winningNumber') winningNumber: number,
+    @Body('secondPrizeWinningNumber') secondPrizeWinningNumber?: number,
+    @Body('userId') userId?: string,
+  ): Promise<Raffle> {
+    return this.rafflesService.setWinningNumbers(
+      id,
+      winningNumber,
+      secondPrizeWinningNumber,
+      userId,
+    );
+  }
+
+  // @Post(':id/recurrent')
+  // createRecurrentRaffle(
+  //   @Param('id') id: string,
+  //   @Body('userId') userId: string,
+  // ): Promise<Raffle> {
+  //   return this.rafflesService.createRecurrentRaffle(id, userId);
+  // }
 }

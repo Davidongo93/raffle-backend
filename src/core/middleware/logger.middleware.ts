@@ -71,6 +71,16 @@ export class LoggerMiddleware implements NestMiddleware {
           ? formatJson(res.locals.responseBody)
           : chalk.gray('No response body');
 
+      // headers
+      const ResHeaders =
+        typeof res.getHeaders === 'function'
+          ? formatJson(res.getHeaders())
+          : chalk.gray('No response headers');
+      const ReqHeaders =
+        typeof req.headers !== 'undefined' && req.headers !== null
+          ? formatJson(req.headers)
+          : chalk.gray('No request headers');
+
       // Diseño visual mejorado
       const separator = chalk.hex('#FF6D00')('│');
       const horizontalLine = chalk.hex('#FF6D00')('├' + '─'.repeat(78) + '┤');
@@ -91,6 +101,16 @@ export class LoggerMiddleware implements NestMiddleware {
         horizontalLine,
         `${separator} ${chalk.bold.hex('#FF9E00')('Response Body:')} ${separator}`,
         ...responseBody
+          .split('\n')
+          .map(line => `${separator} ${line} ${separator}`),
+        horizontalLine,
+        `${separator} ${chalk.bold.hex('#FF9E00')('Request Headers:')} ${separator}`,
+        ...ReqHeaders
+          .split('\n')
+          .map(line => `${separator} ${line} ${separator}`),
+        horizontalLine,
+        `${separator} ${chalk.bold.hex('#FF9E00')('Response Headers:')} ${separator}`,
+        ...ResHeaders
           .split('\n')
           .map(line => `${separator} ${line} ${separator}`),
         bottomLine,
