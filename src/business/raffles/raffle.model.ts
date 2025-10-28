@@ -13,7 +13,7 @@ import {
   UpdatedAt,
 } from 'sequelize-typescript';
 import { User } from '../users/user.model';
-import { RaffleHistory } from './raffle-history.mode';
+import { RaffleHistory } from './raffle-history.model';
 
 export enum RaffleStatus {
   DRAFT = 'draft',

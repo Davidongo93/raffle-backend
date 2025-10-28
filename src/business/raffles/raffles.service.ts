@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateRaffleDto } from './dto/create-raffle.dto';
-import { RaffleHistory } from './raffle-history.mode';
+import { RaffleHistory } from './raffle-history.model';
 import { ColombianLotteryType, DrawMode, Raffle, RaffleStatus, RaffleType } from './raffle.model';
 
 @Injectable()

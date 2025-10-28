@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 //import { AuthGuard } from '@nestjs/passport';
 import { CreateRaffleDto } from './dto/create-raffle.dto';
-import { RaffleHistory } from './raffle-history.mode';
+import { RaffleHistory } from './raffle-history.model';
 import { DrawMode, Raffle, RaffleStatus } from './raffle.model';
 import { RafflesService } from './raffles.service';
 
